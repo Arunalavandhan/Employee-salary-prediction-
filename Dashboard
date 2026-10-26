@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SalaryIQ{% endblock %}
+{% block content %}
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Predict employee salaries with confidence.</h1>
+    <p>A regression model trained on experience, education, role, department, and location — explore its accuracy below, or predict a real employee's salary.</p>
+    <div class="submit-row">
+      <a href="{{ url_for('predict_form') }}" class="btn">Predict a Salary</a>
+      <span class="mono" style="font-size:13px;color:var(--muted);">model: {{ best_model }}</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Held-out results</div>
+    <h2 class="section-title">Model performance</h2>
+    <p class="section-lede">Measured on employees the model never saw during training or model selection.</p>
+
+    <div class="metrics-strip">
+      <div class="metric"><div class="v">${{ "{:,.0f}".format(metrics.mae) }}</div><div class="k">Mean Absolute Error</div></div>
+      <div class="metric"><div class="v">${{ "{:,.0f}".format(metrics.rmse) }}</div><div class="k">RMSE</div></div>
+      <div class="metric"><div class="v">{{ "%.1f"|format(metrics.r2_score*100) }}%</div><div class="k">R² Score</div></div>
+      <div class="metric"><div class="v">{{ metrics.mape_percent }}%</div><div class="k">Avg. % Error</div></div>
+    </div>
+
+    <div class="charts">
+      <figure>
+        <img src="{{ url_for('static', filename='images/actual_vs_predicted.png') }}" alt="Actual vs predicted salary">
+        <figcaption>Predicted vs. actual salary on the test set — tighter clustering along the diagonal means better accuracy.</figcaption>
+      </figure>
+      <figure>
+        <img src="{{ url_for('static', filename='images/residuals.png') }}" alt="Residual distribution">
+        <figcaption>Prediction errors are centered near zero, with no strong systematic bias.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Model selection</div>
+    <h2 class="section-title">How the model was chosen</h2>
+    <p class="section-lede">Three regression models, cross-validated on R². The best-fitting one won.</p>
+    <div class="models">
+      {% for name, res in cv_results.items() %}
+      <div class="model {{ 'winner' if name == best_model else '' }}">
+        <div class="tag">{{ 'Selected' if name == best_model else '' }}</div>
+        <h4>{{ name.replace('_',' ').title() }}</h4>
+        <div class="score">{{ "%.3f"|format(res.mean_r2) }}</div>
+        <div class="score-label">mean CV R² score</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Feature importance</div>
+    <h2 class="section-title">What drives predicted salary</h2>
+    <p class="section-lede">Job title and years of experience dominate. Notably, gender does not appear among the top drivers — the model learned it isn't a real salary signal in this data.</p>
+    <figure style="margin-top:24px;">
+      <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature importance">
+      <figcaption>Top 15 features by importance in the trained model.</figcaption>
+    </figure>
+  </div>
+</section>
+
+{% endblock %}
