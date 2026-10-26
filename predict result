@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Prediction Result — SalaryIQ{% endblock %}
+{% block content %}
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Here's the estimate.</h1>
+    <p>Based on the profile you entered, scored by the trained regression model.</p>
+  </div>
+</header>
+
+<section style="border-top:none; padding-top:0;">
+  <div class="wrap">
+
+    <div class="result-card">
+      <div class="label">Predicted annual salary</div>
+      <div class="figure">${{ "{:,.0f}".format(result.predicted_salary) }}</div>
+      <div class="range">Typical model error is about ±${{ "{:,.0f}".format(mae) }} ({{ mape }}% on average)</div>
+
+      <div class="reasons">
+        {% for reason in reasons %}
+        <span>{{ reason }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="submit-row" style="margin-top:26px;">
+      <a href="{{ url_for('predict_form') }}" class="btn-outline" style="padding:10px 18px; border-radius:4px; text-decoration:none;">Predict another</a>
+      <a href="{{ url_for('dashboard') }}" class="btn">Back to Dashboard</a>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}
