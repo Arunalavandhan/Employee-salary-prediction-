@@ -1,0 +1,30 @@
+"""
+config.py
+---------
+Single place for paths, columns, and training parameters.
+"""
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+MODEL_DIR = os.path.join(BASE_DIR, "models")
+OUTPUT_DIR = os.path.join(BASE_DIR, "outputs")
+
+os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(MODEL_DIR, exist_ok=True)
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+DATA_PATH = os.path.join(DATA_DIR, "employee_salary_data.csv")
+BEST_MODEL_PATH = os.path.join(MODEL_DIR, "salary_model.joblib")
+METRICS_PATH = os.path.join(OUTPUT_DIR, "metrics.json")
+TRAINING_SUMMARY_PATH = os.path.join(OUTPUT_DIR, "training_summary.json")
+FEATURE_IMPORTANCE_PATH = os.path.join(OUTPUT_DIR, "feature_importance.csv")
+
+TARGET_COL = "Salary"
+
+NUMERIC_FEATURES = ["Age", "YearsExperience", "YearsAtCompany"]
+CATEGORICAL_FEATURES = ["Gender", "EducationLevel", "JobTitle", "Department", "Location"]
+
+RANDOM_STATE = 42
+TEST_SIZE = 0.2
+CV_FOLDS = 5
