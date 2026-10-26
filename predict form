@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block title %}Predict Salary — SalaryIQ{% endblock %}
+{% block content %}
+
+<header class="hero">
+  <div class="wrap">
+    <h1>Predict a salary.</h1>
+    <p>Enter an employee's profile to estimate a market-consistent salary based on the trained model.</p>
+  </div>
+</header>
+
+<section style="border-top:none; padding-top:0;">
+  <div class="wrap">
+
+    {% if error %}
+    <div class="error-box">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" class="form-card">
+      <fieldset>
+        <legend>Employee profile</legend>
+        <div class="grid-3">
+          <div class="field">
+            <label for="Age">Age</label>
+            <input type="number" id="Age" name="Age" min="18" max="75" value="{{ form.Age or 30 }}">
+          </div>
+          <div class="field">
+            <label for="Gender">Gender</label>
+            <select id="Gender" name="Gender">
+              <option value="Female" {{ 'selected' if form.Gender=='Female' }}>Female</option>
+              <option value="Male" {{ 'selected' if form.Gender=='Male' }}>Male</option>
+              <option value="Non-binary" {{ 'selected' if form.Gender=='Non-binary' }}>Non-binary</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="EducationLevel">Education level</label>
+            <select id="EducationLevel" name="EducationLevel">
+              <option value="High School" {{ 'selected' if form.EducationLevel=='High School' }}>High School</option>
+              <option value="Bachelor's" {{ 'selected' if form.EducationLevel=="Bachelor's" }}>Bachelor's</option>
+              <option value="Master's" {{ 'selected' if form.EducationLevel=="Master's" }}>Master's</option>
+              <option value="PhD" {{ 'selected' if form.EducationLevel=='PhD' }}>PhD</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="YearsExperience">Years of experience</label>
+            <input type="number" id="YearsExperience" name="YearsExperience" min="0" max="50" value="{{ form.YearsExperience or 5 }}">
+          </div>
+          <div class="field">
+            <label for="YearsAtCompany">Years at this company</label>
+            <input type="number" id="YearsAtCompany" name="YearsAtCompany" min="0" max="40" value="{{ form.YearsAtCompany or 2 }}">
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Role &amp; location</legend>
+        <div class="grid-3">
+          <div class="field">
+            <label for="JobTitle">Job title</label>
+            <select id="JobTitle" name="JobTitle">
+              <option value="Analyst" {{ 'selected' if form.JobTitle=='Analyst' }}>Analyst</option>
+              <option value="Engineer" {{ 'selected' if form.JobTitle=='Engineer' }}>Engineer</option>
+              <option value="Senior Engineer" {{ 'selected' if form.JobTitle=='Senior Engineer' }}>Senior Engineer</option>
+              <option value="Manager" {{ 'selected' if form.JobTitle=='Manager' }}>Manager</option>
+              <option value="Director" {{ 'selected' if form.JobTitle=='Director' }}>Director</option>
+              <option value="VP" {{ 'selected' if form.JobTitle=='VP' }}>VP</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="Department">Department</label>
+            <select id="Department" name="Department">
+              <option value="Engineering" {{ 'selected' if form.Department=='Engineering' }}>Engineering</option>
+              <option value="Sales" {{ 'selected' if form.Department=='Sales' }}>Sales</option>
+              <option value="HR" {{ 'selected' if form.Department=='HR' }}>HR</option>
+              <option value="Finance" {{ 'selected' if form.Department=='Finance' }}>Finance</option>
+              <option value="Marketing" {{ 'selected' if form.Department=='Marketing' }}>Marketing</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="Location">Location</label>
+            <select id="Location" name="Location">
+              <option value="San Francisco" {{ 'selected' if form.Location=='San Francisco' }}>San Francisco</option>
+              <option value="New York" {{ 'selected' if form.Location=='New York' }}>New York</option>
+              <option value="Seattle" {{ 'selected' if form.Location=='Seattle' }}>Seattle</option>
+              <option value="Chicago" {{ 'selected' if form.Location=='Chicago' }}>Chicago</option>
+              <option value="Austin" {{ 'selected' if form.Location=='Austin' }}>Austin</option>
+              <option value="Remote" {{ 'selected' if form.Location=='Remote' }}>Remote</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <div class="submit-row">
+        <button type="submit">Predict Salary</button>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+{% endblock %}
